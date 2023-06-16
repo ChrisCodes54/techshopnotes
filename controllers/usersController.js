@@ -24,6 +24,7 @@ return res.status(400).json({message: 'All fields are required'})
     }
 //here we will check for any duplicate usernames to ensure no one can sign up with the same username
     const duplicate = await User.findOne({username}).lean().exec()
+    
     if(duplicate) {
         return res.status(409).json({message: 'Duplicate Username'})
     }
