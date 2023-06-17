@@ -9,7 +9,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
     const users = await User.find().select('-password').lean()
 
-    if(!users) {
+    if(!users?.length) {
         return res.status(400).json({message: 'No users found'})
     } 
     res.json(users)
@@ -35,7 +35,7 @@ return res.status(400).json({message: 'All fields are required'})
     const userObject = {username, 'password': hashedPassword, roles}
 
     //create and save new user
-    const user = await user.create(userObject)
+    const user = await User.create(userObject)
 
     if(user) {
         res.status(201).json({message: `New user ${username} created!`})
@@ -50,11 +50,11 @@ return res.status(400).json({message: 'All fields are required'})
 const updateUser = asyncHandler(async (req, res) => {
     const {id, username, roles, active, password} = req.body
 
-    if(!id || !username || !Array.isArray(roles) || typeof active !== 'boolean') {
-        return res.status(400).json({message:'All fields are required'})
+    if(!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
+        return res.status(400).json({message:'All fields except password are required'})
     }
 
-    const user = await user.findById(id).exec()
+    const user = await User.findById(id).exec()
 
     if(!user) {
         return res.status(400).json({message: 'User not found'})
