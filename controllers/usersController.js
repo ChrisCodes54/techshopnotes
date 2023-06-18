@@ -82,19 +82,21 @@ const updateUser = asyncHandler(async (req, res) => {
 
 //delete method
 const deleteUser = asyncHandler(async (req, res) => {
+
     const {id} = req.body 
 
     if(!id) {
         return res.status(400).json({message:'User ID Required!'})
     }
 
-    const notes = await Note.findOne({user: id}).lean().exec()
+    const note = await Note.findOne({user: id}).lean().exec()
 
-    if(notes?.length) {
+    if(note) {
         return res.status(400).jsom({message: 'User has assigned notes'})
     } 
 
-    const user = await user.findById(id).exec()
+    const user = await User.findById(id).exec()
+
     if(!user) {
         return res.status(400).json({message: 'User not found'})
     }
@@ -103,7 +105,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     
     const reply = `Username ${result.username} with ID ${result._id} deleted!`
 
-    response.json(reply)
+    res.json(reply)
 
 })
 
