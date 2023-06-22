@@ -22,7 +22,7 @@ const getAllNotes = asyncHandler(async (req,res) => {
 
 //Create a new note
 
-const createNewNotes = asyncHandler(async (req,res) => {
+const createNewNote = asyncHandler(async (req,res) => {
     const {user, title, text} = req.body
 
     if (!user || !title || !text) {
